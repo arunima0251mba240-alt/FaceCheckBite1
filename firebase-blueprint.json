@@ -1,0 +1,256 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A skincare product or starter kit in the Face Check Bite catalogue.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 80, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "slug": { "type": "string", "maxLength": 100 },
+        "name": { "type": "string", "maxLength": 140 },
+        "brand": { "type": "string", "maxLength": 80 },
+        "category": { "type": "string", "enum": ["cleanser", "moisturizer", "sunscreen", "serum", "kit"], "maxLength": 32 },
+        "priceInr": { "type": "number" },
+        "mrpInr": { "type": "number" },
+        "isStarterKit": { "type": "boolean" },
+        "budgetTier": { "type": "string", "enum": ["budget", "mid", "premium"], "maxLength": 20 },
+        "genderFocus": { "type": "string", "enum": ["unisex", "men", "women"], "maxLength": 20 },
+        "skinTypes": { "type": "array" },
+        "concerns": { "type": "array" },
+        "keyIngredients": { "type": "array" },
+        "avoidIfAllergicTo": { "type": "array" },
+        "howToUseAM": { "type": "string", "maxLength": 400 },
+        "howToUsePM": { "type": "string", "maxLength": 400 },
+        "whyItSuits": { "type": "string", "maxLength": 500 },
+        "ingredientTransparency": { "type": "string", "maxLength": 800 },
+        "imageUrl": { "type": "string", "maxLength": 300 },
+        "sizeLabel": { "type": "string", "maxLength": 40 },
+        "inStock": { "type": "boolean" },
+        "budgetAlternativeId": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "id",
+        "slug",
+        "name",
+        "brand",
+        "category",
+        "priceInr",
+        "mrpInr",
+        "isStarterKit",
+        "budgetTier",
+        "genderFocus",
+        "skinTypes",
+        "concerns",
+        "keyIngredients",
+        "avoidIfAllergicTo",
+        "howToUseAM",
+        "howToUsePM",
+        "whyItSuits",
+        "ingredientTransparency",
+        "imageUrl",
+        "sizeLabel",
+        "inStock",
+        "createdAt"
+      ]
+    },
+    "QuizResponse": {
+      "title": "QuizResponse",
+      "description": "Completed Skin Fit Test submission with user preferences, skin profile, and campaign attribution.",
+      "type": "object",
+      "properties": {
+        "responseId": { "type": "string", "maxLength": 80, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "gender": { "type": "string", "enum": ["Male", "Female", "Prefer not to say"], "maxLength": 30 },
+        "ageRange": { "type": "string", "maxLength": 30 },
+        "skinType": { "type": "string", "enum": ["oily", "dry", "combination", "normal", "sensitive"], "maxLength": 30 },
+        "skinTone": { "type": "string", "enum": ["fair", "medium", "tan", "deep"], "maxLength": 20 },
+        "undertone": { "type": "string", "enum": ["warm", "cool", "neutral"], "maxLength": 20 },
+        "concerns": { "type": "array" },
+        "allergies": { "type": "array" },
+        "customAllergyNote": { "type": "string", "maxLength": 240 },
+        "sunExposure": { "type": "string", "maxLength": 40 },
+        "pollutionExposure": { "type": "string", "maxLength": 40 },
+        "sleepHours": { "type": "string", "maxLength": 40 },
+        "waterIntake": { "type": "string", "maxLength": 40 },
+        "screenTime": { "type": "string", "maxLength": 40 },
+        "currentRoutine": { "type": "string", "enum": ["none", "basic", "advanced"], "maxLength": 20 },
+        "budgetRange": { "type": "string", "enum": ["500-800", "800-1200", "1200+"], "maxLength": 20 },
+        "consentAccepted": { "type": "boolean" },
+        "referralCode": { "type": "string", "maxLength": 40 },
+        "utmSource": { "type": "string", "maxLength": 60 },
+        "utmMedium": { "type": "string", "maxLength": 60 },
+        "utmCampaign": { "type": "string", "maxLength": 80 },
+        "recommendedProductIds": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "responseId",
+        "gender",
+        "ageRange",
+        "skinType",
+        "skinTone",
+        "undertone",
+        "concerns",
+        "allergies",
+        "customAllergyNote",
+        "sunExposure",
+        "pollutionExposure",
+        "sleepHours",
+        "waterIntake",
+        "screenTime",
+        "currentRoutine",
+        "budgetRange",
+        "consentAccepted",
+        "referralCode",
+        "utmSource",
+        "utmMedium",
+        "utmCampaign",
+        "recommendedProductIds",
+        "createdAt"
+      ]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order or pre-launch purchase interest inquiry.",
+      "type": "object",
+      "properties": {
+        "orderNumber": { "type": "string", "maxLength": 40 },
+        "quizResponseId": { "type": "string", "maxLength": 80 },
+        "customerName": { "type": "string", "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 20 },
+        "address": { "type": "string", "maxLength": 300 },
+        "city": { "type": "string", "maxLength": 80 },
+        "pincode": { "type": "string", "maxLength": 12 },
+        "paymentMethod": { "type": "string", "enum": ["upi", "cod", "prelaunch_interest"], "maxLength": 30 },
+        "orderType": { "type": "string", "enum": ["order", "interest"], "maxLength": 20 },
+        "itemSummaries": { "type": "array" },
+        "subtotalInr": { "type": "number" },
+        "discountInr": { "type": "number" },
+        "totalInr": { "type": "number" },
+        "referralCodeUsed": { "type": "string", "maxLength": 40 },
+        "utmSource": { "type": "string", "maxLength": 60 },
+        "status": { "type": "string", "enum": ["confirmed", "interest_recorded", "dispatched"], "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "orderNumber",
+        "quizResponseId",
+        "customerName",
+        "phone",
+        "address",
+        "city",
+        "pincode",
+        "paymentMethod",
+        "orderType",
+        "itemSummaries",
+        "subtotalInr",
+        "discountInr",
+        "totalInr",
+        "referralCodeUsed",
+        "utmSource",
+        "status",
+        "createdAt"
+      ]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Post-recommendation validation survey response.",
+      "type": "object",
+      "properties": {
+        "quizResponseId": { "type": "string", "maxLength": 80 },
+        "relevanceScore": { "type": "number" },
+        "wouldTry": { "type": "string", "enum": ["Yes", "Maybe", "No"], "maxLength": 16 },
+        "willingnessToPayInr": { "type": "number" },
+        "comment": { "type": "string", "maxLength": 400 },
+        "utmSource": { "type": "string", "maxLength": 60 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "quizResponseId",
+        "relevanceScore",
+        "wouldTry",
+        "willingnessToPayInr",
+        "comment",
+        "utmSource",
+        "createdAt"
+      ]
+    },
+    "AnalyticsEvent": {
+      "title": "AnalyticsEvent",
+      "description": "Funnel tracking event for Skin Fit Test and conversion steps.",
+      "type": "object",
+      "properties": {
+        "eventName": {
+          "type": "string",
+          "enum": [
+            "page_view",
+            "quiz_started",
+            "quiz_step",
+            "quiz_completed",
+            "kit_added",
+            "checkout_started",
+            "order_placed",
+            "interest_expressed",
+            "feedback_submitted",
+            "profile_shared"
+          ],
+          "maxLength": 40
+        },
+        "sessionId": { "type": "string", "maxLength": 80 },
+        "utmSource": { "type": "string", "maxLength": 60 },
+        "utmMedium": { "type": "string", "maxLength": 60 },
+        "utmCampaign": { "type": "string", "maxLength": 80 },
+        "referralCode": { "type": "string", "maxLength": 40 },
+        "stepNumber": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "eventName",
+        "sessionId",
+        "utmSource",
+        "utmMedium",
+        "utmCampaign",
+        "referralCode",
+        "stepNumber",
+        "createdAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized admin record for dashboard access.",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 120 },
+        "role": { "type": "string", "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Publicly readable skincare product catalogue; admin-managed writes."
+    },
+    "/quiz_responses/{responseId}": {
+      "schema": { "$ref": "#/entities/QuizResponse" },
+      "description": "Skin Fit Test responses submitted by visitors; create-only for visitors, read/manage for admins."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Checkout orders and pre-launch purchase inquiries; create-only for visitors, read/update for admins."
+    },
+    "/feedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/Feedback" },
+      "description": "Validation survey responses; create-only for visitors, read-only for admins."
+    },
+    "/analytics_events/{eventId}": {
+      "schema": { "$ref": "#/entities/AnalyticsEvent" },
+      "description": "Anonymous funnel analytics events; create-only for visitors, read-only for admins."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Admin directory; read-only for admins."
+    }
+  }
+}

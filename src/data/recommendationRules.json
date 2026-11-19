@@ -1,0 +1,85 @@
+{
+  "version": "1.0",
+  "description": "Transparent, editable rule configuration for Face Check Bite v1 (rule-based, no AI diagnosis).",
+  "starterKitConfig": {
+    "kitId": "fcb-kit-starter-799",
+    "introPriceInr": 799,
+    "estimatedVariableCostInr": 450,
+    "referralDiscountInr": 50
+  },
+  "skinTypeRules": {
+    "oily": {
+      "label": "Oily Skin",
+      "explanation": "Your sebaceous glands produce extra sebum, especially across the T-zone in humid or warm weather. Gel cleansers, oil-free hydration, and matte UV filters keep shine balanced without stripping.",
+      "preferredCleanserIds": ["fcb-cleanser-salicylic-gel", "fcb-cleanser-charcoal-men", "fcb-cleanser-oat-calm"],
+      "preferredMoisturizerIds": ["fcb-moisturizer-oilfree-gel", "fcb-moisturizer-aloe-light"],
+      "preferredSunscreenIds": ["fcb-sunscreen-matte-spf50", "fcb-sunscreen-daily-fluid"]
+    },
+    "dry": {
+      "label": "Dry Skin",
+      "explanation": "Your skin loses moisture faster and benefits from non-foaming amino cleansers, lipid-rich ceramide creams, and nourishing sun protection.",
+      "preferredCleanserIds": ["fcb-cleanser-oat-calm"],
+      "preferredMoisturizerIds": ["fcb-moisturizer-ceramide-repair", "fcb-moisturizer-aloe-light"],
+      "preferredSunscreenIds": ["fcb-sunscreen-dewy-spf50", "fcb-sunscreen-daily-fluid"]
+    },
+    "combination": {
+      "label": "Combination Skin",
+      "explanation": "You experience oiliness on the forehead and nose alongside normal or drier cheeks. Balanced pH cleansers and lightweight layers prevent congestion without parching cheeks.",
+      "preferredCleanserIds": ["fcb-cleanser-salicylic-gel", "fcb-cleanser-oat-calm"],
+      "preferredMoisturizerIds": ["fcb-moisturizer-oilfree-gel", "fcb-moisturizer-aloe-light"],
+      "preferredSunscreenIds": ["fcb-sunscreen-matte-spf50", "fcb-sunscreen-daily-fluid"]
+    },
+    "normal": {
+      "label": "Normal Skin",
+      "explanation": "Your oil and hydration levels are naturally balanced. A consistent 3-step cleanse, moisturize, and SPF habit preserves clarity and prevents early pigmentation.",
+      "preferredCleanserIds": ["fcb-cleanser-oat-calm", "fcb-cleanser-charcoal-men"],
+      "preferredMoisturizerIds": ["fcb-moisturizer-oilfree-gel", "fcb-moisturizer-ceramide-repair", "fcb-moisturizer-aloe-light"],
+      "preferredSunscreenIds": ["fcb-sunscreen-matte-spf50", "fcb-sunscreen-dewy-spf50", "fcb-sunscreen-daily-fluid"]
+    },
+    "sensitive": {
+      "label": "Sensitive Skin",
+      "explanation": "Your skin reacts quickly to harsh surfactants, strong acids, or fragrance. Gentle oat-based cleansing, ceramide barrier care, and soothing UV protection come first.",
+      "preferredCleanserIds": ["fcb-cleanser-oat-calm"],
+      "preferredMoisturizerIds": ["fcb-moisturizer-ceramide-repair", "fcb-moisturizer-aloe-light"],
+      "preferredSunscreenIds": ["fcb-sunscreen-dewy-spf50", "fcb-sunscreen-daily-fluid"]
+    }
+  },
+  "concernSerumRules": {
+    "acne": {
+      "label": "Acne & Breakouts",
+      "preferredSerumIds": ["fcb-serum-niacinamide-zinc", "fcb-serum-alpha-arbutin"],
+      "reason": "5% Niacinamide + Zinc PCA helps calm active redness and regulate pore-clogging oil."
+    },
+    "oiliness": {
+      "label": "Excess Oil & Shine",
+      "preferredSerumIds": ["fcb-serum-niacinamide-zinc"],
+      "reason": "Zinc PCA and 5% Niacinamide rebalance excess surface sebum through humid Indian afternoons."
+    },
+    "pigmentation": {
+      "label": "Pigmentation & Dark Spots",
+      "preferredSerumIds": ["fcb-serum-alpha-arbutin", "fcb-serum-niacinamide-zinc", "fcb-serum-vitc-glow"],
+      "reason": "2% Alpha Arbutin targets uneven melanin patches and post-acne marks gently."
+    },
+    "dullness": {
+      "label": "Dullness & Uneven Tone",
+      "preferredSerumIds": ["fcb-serum-vitc-glow", "fcb-serum-alpha-arbutin"],
+      "reason": "Stable Vitamin C + Ferulic Acid revives tired skin exposed to urban dust and sun."
+    },
+    "dryness": {
+      "label": "Dryness & Flaking",
+      "preferredSerumIds": ["fcb-serum-alpha-arbutin"],
+      "reason": "Hydrating hyaluronic acid + cica supports plumpness without drying exfoliants."
+    },
+    "sensitivity": {
+      "label": "Redness & Sensitivity",
+      "preferredSerumIds": ["fcb-serum-alpha-arbutin"],
+      "reason": "Cica-led soothing support calms reactivity without harsh acids or fragrance."
+    }
+  },
+  "toneSwatches": {
+    "fair": { "label": "Fair", "warm": "#F3D7C1", "cool": "#F5D7D3", "neutral": "#F2D6C8" },
+    "medium": { "label": "Medium", "warm": "#DDA982", "cool": "#D9A493", "neutral": "#DAA78B" },
+    "tan": { "label": "Tan / Wheatish", "warm": "#BA7E53", "cool": "#B37A64", "neutral": "#B67C5B" },
+    "deep": { "label": "Deep", "warm": "#7E4B2E", "cool": "#78493A", "neutral": "#7B4A34" }
+  }
+}

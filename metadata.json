@@ -1,0 +1,6 @@
+{
+  "name": "Face Check Bite",
+  "description": "Know your skin. Pick what fits. Take our simple Skin Fit Test and explore personalized skincare recommendations for Indian skin without guesswork.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,275 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email_verified == true
+        && (
+          request.auth.token.email == 'arunima.0251mba240@dgu.ac.in'
+          || exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        );
+    }
+
+    function isBoundedStringList(arr, maxLen) {
+      return arr is list
+        && arr.size() <= maxLen
+        && (arr.size() == 0 || (arr.size() > 0 && arr[0] is string && arr[0].size() <= 120));
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll([
+          'id', 'slug', 'name', 'brand', 'category', 'priceInr', 'mrpInr',
+          'isStarterKit', 'budgetTier', 'genderFocus', 'skinTypes', 'concerns',
+          'keyIngredients', 'avoidIfAllergicTo', 'howToUseAM', 'howToUsePM',
+          'whyItSuits', 'ingredientTransparency', 'imageUrl', 'sizeLabel',
+          'inStock', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'id', 'slug', 'name', 'brand', 'category', 'priceInr', 'mrpInr',
+          'isStarterKit', 'budgetTier', 'genderFocus', 'skinTypes', 'concerns',
+          'keyIngredients', 'avoidIfAllergicTo', 'howToUseAM', 'howToUsePM',
+          'whyItSuits', 'ingredientTransparency', 'imageUrl', 'sizeLabel',
+          'inStock', 'budgetAlternativeId', 'createdAt'
+        ])
+        && isValidId(data.id)
+        && data.slug is string && data.slug.size() <= 100
+        && data.name is string && data.name.size() >= 2 && data.name.size() <= 140
+        && data.brand is string && data.brand.size() <= 80
+        && data.category in ['cleanser', 'moisturizer', 'sunscreen', 'serum', 'kit']
+        && data.priceInr is number && data.priceInr >= 0 && data.priceInr <= 50000
+        && data.mrpInr is number && data.mrpInr >= 0 && data.mrpInr <= 50000
+        && data.isStarterKit is bool
+        && data.budgetTier in ['budget', 'mid', 'premium']
+        && data.genderFocus in ['unisex', 'men', 'women']
+        && isBoundedStringList(data.skinTypes, 10)
+        && isBoundedStringList(data.concerns, 12)
+        && isBoundedStringList(data.keyIngredients, 15)
+        && isBoundedStringList(data.avoidIfAllergicTo, 15)
+        && data.howToUseAM is string && data.howToUseAM.size() <= 400
+        && data.howToUsePM is string && data.howToUsePM.size() <= 400
+        && data.whyItSuits is string && data.whyItSuits.size() <= 500
+        && data.ingredientTransparency is string && data.ingredientTransparency.size() <= 800
+        && data.imageUrl is string && data.imageUrl.size() <= 300
+        && data.sizeLabel is string && data.sizeLabel.size() <= 40
+        && data.inStock is bool
+        && (!data.keys().hasAny(['budgetAlternativeId']) || (data.budgetAlternativeId is string && data.budgetAlternativeId.size() <= 80))
+        && data.createdAt is timestamp;
+    }
+
+    function isValidQuizResponse(data) {
+      return data.keys().hasAll([
+          'responseId', 'gender', 'ageRange', 'skinType', 'skinTone', 'undertone',
+          'concerns', 'allergies', 'customAllergyNote', 'sunExposure',
+          'pollutionExposure', 'sleepHours', 'waterIntake', 'screenTime',
+          'currentRoutine', 'budgetRange', 'consentAccepted', 'referralCode',
+          'utmSource', 'utmMedium', 'utmCampaign', 'recommendedProductIds', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'responseId', 'gender', 'ageRange', 'skinType', 'skinTone', 'undertone',
+          'concerns', 'allergies', 'customAllergyNote', 'sunExposure',
+          'pollutionExposure', 'sleepHours', 'waterIntake', 'screenTime',
+          'currentRoutine', 'budgetRange', 'consentAccepted', 'referralCode',
+          'utmSource', 'utmMedium', 'utmCampaign', 'recommendedProductIds', 'createdAt'
+        ])
+        && isValidId(data.responseId)
+        && data.gender in ['Male', 'Female', 'Prefer not to say']
+        && data.ageRange is string && data.ageRange.size() >= 1 && data.ageRange.size() <= 30
+        && data.skinType in ['oily', 'dry', 'combination', 'normal', 'sensitive']
+        && data.skinTone in ['fair', 'medium', 'tan', 'deep']
+        && data.undertone in ['warm', 'cool', 'neutral']
+        && isBoundedStringList(data.concerns, 10)
+        && isBoundedStringList(data.allergies, 12)
+        && data.customAllergyNote is string && data.customAllergyNote.size() <= 240
+        && data.sunExposure is string && data.sunExposure.size() <= 40
+        && data.pollutionExposure is string && data.pollutionExposure.size() <= 40
+        && data.sleepHours is string && data.sleepHours.size() <= 40
+        && data.waterIntake is string && data.waterIntake.size() <= 40
+        && data.screenTime is string && data.screenTime.size() <= 40
+        && data.currentRoutine in ['none', 'basic', 'advanced']
+        && data.budgetRange in ['500-800', '800-1200', '1200+']
+        && data.consentAccepted == true
+        && data.referralCode is string && data.referralCode.size() <= 40
+        && data.utmSource is string && data.utmSource.size() <= 60
+        && data.utmMedium is string && data.utmMedium.size() <= 60
+        && data.utmCampaign is string && data.utmCampaign.size() <= 80
+        && isBoundedStringList(data.recommendedProductIds, 10)
+        && data.createdAt is timestamp;
+    }
+
+    function isValidOrder(data) {
+      return data.keys().hasAll([
+          'orderNumber', 'quizResponseId', 'customerName', 'phone', 'address',
+          'city', 'pincode', 'paymentMethod', 'orderType', 'itemSummaries',
+          'subtotalInr', 'discountInr', 'totalInr', 'referralCodeUsed',
+          'utmSource', 'status', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'orderNumber', 'quizResponseId', 'customerName', 'phone', 'address',
+          'city', 'pincode', 'paymentMethod', 'orderType', 'itemSummaries',
+          'subtotalInr', 'discountInr', 'totalInr', 'referralCodeUsed',
+          'utmSource', 'status', 'createdAt'
+        ])
+        && data.orderNumber is string && data.orderNumber.size() >= 3 && data.orderNumber.size() <= 40
+        && data.quizResponseId is string && data.quizResponseId.size() <= 80
+        && data.customerName is string && data.customerName.size() >= 2 && data.customerName.size() <= 120
+        && data.phone is string && data.phone.size() >= 8 && data.phone.size() <= 20
+        && data.address is string && data.address.size() <= 300
+        && data.city is string && data.city.size() >= 2 && data.city.size() <= 80
+        && data.pincode is string && data.pincode.size() <= 12
+        && data.paymentMethod in ['upi', 'cod', 'prelaunch_interest']
+        && data.orderType in ['order', 'interest']
+        && isBoundedStringList(data.itemSummaries, 20)
+        && data.subtotalInr is number && data.subtotalInr >= 0 && data.subtotalInr <= 200000
+        && data.discountInr is number && data.discountInr >= 0 && data.discountInr <= 50000
+        && data.totalInr is number && data.totalInr >= 0 && data.totalInr <= 200000
+        && data.referralCodeUsed is string && data.referralCodeUsed.size() <= 40
+        && data.utmSource is string && data.utmSource.size() <= 60
+        && data.status in ['confirmed', 'interest_recorded', 'dispatched']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidFeedback(data) {
+      return data.keys().hasAll([
+          'quizResponseId', 'relevanceScore', 'wouldTry',
+          'willingnessToPayInr', 'comment', 'utmSource', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'quizResponseId', 'relevanceScore', 'wouldTry',
+          'willingnessToPayInr', 'comment', 'utmSource', 'createdAt'
+        ])
+        && data.quizResponseId is string && data.quizResponseId.size() <= 80
+        && data.relevanceScore is number && data.relevanceScore >= 1 && data.relevanceScore <= 5
+        && data.wouldTry in ['Yes', 'Maybe', 'No']
+        && data.willingnessToPayInr is number && data.willingnessToPayInr >= 0 && data.willingnessToPayInr <= 50000
+        && data.comment is string && data.comment.size() <= 400
+        && data.utmSource is string && data.utmSource.size() <= 60
+        && data.createdAt is timestamp;
+    }
+
+    function isValidAnalyticsEvent(data) {
+      return data.keys().hasAll([
+          'eventName', 'sessionId', 'utmSource', 'utmMedium',
+          'utmCampaign', 'referralCode', 'stepNumber', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'eventName', 'sessionId', 'utmSource', 'utmMedium',
+          'utmCampaign', 'referralCode', 'stepNumber', 'createdAt'
+        ])
+        && data.eventName in [
+          'page_view', 'quiz_started', 'quiz_step', 'quiz_completed',
+          'kit_added', 'checkout_started', 'order_placed',
+          'interest_expressed', 'feedback_submitted', 'profile_shared'
+        ]
+        && data.sessionId is string && data.sessionId.size() >= 1 && data.sessionId.size() <= 80
+        && data.utmSource is string && data.utmSource.size() <= 60
+        && data.utmMedium is string && data.utmMedium.size() <= 60
+        && data.utmCampaign is string && data.utmCampaign.size() <= 80
+        && data.referralCode is string && data.referralCode.size() <= 40
+        && data.stepNumber is number && data.stepNumber >= 0 && data.stepNumber <= 30
+        && data.createdAt is timestamp;
+    }
+
+    // Connection test sentinel document
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // Public catalogue; admin-managed writes
+    match /products/{productId} {
+      allow get: if isValidId(productId);
+      allow list: if true;
+      allow create: if isValidId(productId)
+        && isAdmin()
+        && isValidProduct(incoming())
+        && incoming().id == productId
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(productId)
+        && isAdmin()
+        && isValidProduct(incoming())
+        && incoming().id == existing().id
+        && incoming().createdAt == existing().createdAt
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'priceInr', 'mrpInr', 'inStock', 'whyItSuits', 'howToUseAM', 'howToUsePM'
+        ]);
+      allow delete: if isValidId(productId) && isAdmin();
+    }
+
+    // Quiz responses: visitors can submit with consent; only admin can read/list
+    match /quiz_responses/{responseId} {
+      allow get: if isValidId(responseId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(responseId)
+        && isValidQuizResponse(incoming())
+        && incoming().responseId == responseId
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Orders & purchase interest: visitors can create; only admin can read/update status
+    match /orders/{orderId} {
+      allow get: if isValidId(orderId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(orderId)
+        && isValidOrder(incoming())
+        && incoming().status in ['confirmed', 'interest_recorded']
+        && incoming().createdAt == request.time;
+      allow update: if isValidId(orderId)
+        && isAdmin()
+        && isValidOrder(incoming())
+        && incoming().createdAt == existing().createdAt
+        && incoming().orderNumber == existing().orderNumber
+        && incoming().totalInr == existing().totalInr
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status']);
+      allow delete: if false;
+    }
+
+    // Validation feedback: visitors can create; only admin can read
+    match /feedback/{feedbackId} {
+      allow get: if isValidId(feedbackId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(feedbackId)
+        && isValidFeedback(incoming())
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Funnel analytics events: visitors can log events; only admin can read
+    match /analytics_events/{eventId} {
+      allow get: if isValidId(eventId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isValidId(eventId)
+        && isValidAnalyticsEvent(incoming())
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Admin directory: read-only for admins
+    match /admins/{adminId} {
+      allow get: if isValidId(adminId) && isAdmin();
+      allow list: if isAdmin();
+      allow create, update, delete: if false;
+    }
+  }
+}
