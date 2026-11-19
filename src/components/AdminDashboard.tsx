@@ -287,6 +287,15 @@ export function AdminDashboard({ onCatalogSynced }: { onCatalogSynced: () => voi
             <Upload className="w-3.5 h-3.5" />
             <span>Sync 14 Products to DB</span>
           </button>
+
+          <a
+            href="/face-check-bite.zip"
+            download="face-check-bite.zip"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[#DDE3D7] bg-white text-xs font-medium text-[#1C241E] hover:bg-[#F1F3EE]"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download App ZIP</span>
+          </a>
         </div>
       </div>
 
